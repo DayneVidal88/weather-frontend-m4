@@ -1,87 +1,112 @@
-# 🌦️ Weather Frontend M2
+# 🌦️ App de Clima – Módulo 3
 
-Aplicación de clima (Frontend) desarrollada como MVP para el **Módulo 2** del Bootcamp.  
-El proyecto utiliza **HTML5 semántico**, **Bootstrap 5** para estilos y diseño responsivo además de **CSS**, y **JavaScript básico** para la interacción.  
-Se gestiona con **Git/GitHub** y se entrega con un README descriptivo.
+## 📌 Descripción del proyecto
 
----
----
+Esta aplicación web muestra información climática de distintas ciudades del mundo, permitiendo visualizar el **clima actual** en una vista principal (Home) y acceder a una **vista de detalle** con información ampliada y un pronóstico simplificado.
 
-## Colores dinámicos de las cards
-
-Las cards cambian de color automáticamente según la descripción del clima:
-
-| Clima detectado (descripción) | Clase CSS aplicada | Color de fondo | Ejemplo visual |
-|-------------------------------|--------------------|----------------|----------------|
-| `cielo claro` / `despejado`   | `.card-clear`      | Azul cielo `#87ceeb` | ☀️ Soleado |
-| `nubes` / `algo de nubes`     | `.card-cloudy`     | Gris nublado `#b0c4de` | ☁️ Nublado |
-| `lluvia` / `llovizna`         | `.card-rainy`      | Azul verdoso `#5f9ea0` | 🌧️ Lluvia |
-| `tormenta` / `tormenta eléctrica` | `.card-storm`   | Gris oscuro `#3c3c3c` | ⛈️ Tormenta |
-
-> ⚠️ Nota: se usa `!important` en el CSS para asegurar que los estilos personalizados prevalezcan sobre los de Bootstrap.
-
-## Cómo funciona!
-
-- En **main.js**, al crear cada card de ciudad se asigna la clase de color según la descripción del clima.
-- En **detalle.js**, tanto la card principal como las del pronóstico semanal reciben la clase correspondiente.
-- Los estilos están definidos en `assets/css/style.css`.
-
----
----
-
-## Tecnologías utilizadas
-- **HTML5 semántico** (header, nav, main, section, article, footer).
-- **Bootstrap 5** (grid system, utilidades, componentes: navbar, cards, list-group).
-- **CSS personalizado**:
-  - Fondo con degradado azul cielo para ambientación climática.
-  - Cards redondeadas con efecto hover y sombreado.
-  - Iconos de clima centrados y ampliados.
-  - Botones redondeados estilo app móvil.
-  - Tipografía moderna y responsiva.
-  - Separación de estilos generales y específicos por página.
-- **JavaScript básico** (DOM, eventos, navegación simple).
-- **Git/GitHub** (commits descriptivos, ramas, repositorio público).
+El proyecto corresponde a la iteración del **Módulo 3**, cuyo foco está en la **interfaz, estilos y experiencia de usuario**, manteniendo la funcionalidad base desarrollada previamente.
 
 ---
 
-## Estructura del proyecto
+## 🎯 Temática
 
-weather-frontend-m2/ │
-├── index.html        
-### Página Home con listado de ≥10 localidades 
-├── detalle.html      
-### Página de detalle con pronóstico semanal 
-├── js/ │   └── main.js │ detalle.js     
-### Interacciones básicas (click en card → detalle) 
-├── css/    └── style.css          
-### Estilos adicionales (opcional) 
-├── README.md         
-### Documentación del proyecto
+App de clima orientada a mostrar el estado meteorológico de **ciudades nacionales e internacionales**, utilizando una interfaz clara, responsiva y visualmente coherente con la temática climática.
 
 ---
 
-## Funcionalidades principales
-- **Home**:  
-  - Grilla de ≥10 localidades presentadas como cards de Bootstrap.  
-  - Cada card muestra icono, temperatura y estado actual.  
-  - Botón para navegar al detalle de la localidad.
+## 🧩 Estructura de la aplicación
 
-- **Detalle de localidad**:  
-  - Datos ampliados: temperatura, humedad, viento.  
-  - Pronóstico semanal mostrado en cards/list-group.  
+- **Home (`index.html`)**  
+  Grilla de cards con el clima actual de distintas ciudades.
 
-- **Navegación**:  
-  - Navbar con enlaces a Home, Detalle y Acerca de.  
-  - Footer con información básica del proyecto.  
-
-- **Responsive design**:  
-  - Mobile-first (≤420px).  
-  - Desktop (≥1024px).  
+- **Detalle (`detalle.html`)**  
+  Vista con información ampliada del clima de la ciudad seleccionada y pronóstico semanal simplificado, incluyendo un botón de navegación para volver al inicio.
 
 ---
 
-## Cómo usar
-1. Clona el repositorio:
-   ```bash
-   git clone https://github.com/DayneVidal88/weather-frontend-m2.git
+## 🎨 Metodología de estilos
+
+Se utilizó la metodología **BEM (Block, Element, Modifier)** para la organización de clases CSS, permitiendo:
+
+- Nombres de clases claros y semánticos
+- Reutilización de componentes
+- Mayor mantenibilidad del código
+
+**Ejemplos:**
+- `.place-card`
+- `.place-card__title`
+- `.place-card--clear`
+
+Bootstrap se utiliza en conjunto con BEM para el layout y componentes base.
+
+---
+
+## 🛠️ SASS y estructura de estilos
+
+Los estilos fueron refactorizados utilizando **SASS (SCSS)**, con una estructura modular:
+
+```
+assets/
+├── scss/
+│   ├── base/
+        └── _mixins.scss         // Reutiliza efecto hover en las cards
+│   │   └── _variables.scss      // Variables de colores, fuentes y breakpoints
+│   ├── layout/
+│   │   └── _layout.scss         // Estilos globales y estructura base
+│   ├── components/
+│   │   ├── _navbar.scss         // Navbar
+│   │   ├── _place-card.scss     // Cards de clima (BEM)
+│   │   └── _footer.scss         // Footer
+│   └── main.scss                // Importa todos los parciales
+│
+├── css/
+│   └── main.css                 // CSS compilado
+```
+
+### Características utilizadas:
+- Variables (`$colors`, `$fonts`, `$breakpoints`)
+- Anidamiento
+- Mixins reutilizables
+- Media queries
+
+---
+
+## 📱 Responsividad y layout
+
+- Se utilizó el **sistema de grillas de Bootstrap** (`col-12`, `col-md-6`, `col-lg-4`).
+- En pantallas pequeñas, las cards se muestran en una sola columna.
+- En pantallas grandes, se organizan en múltiples columnas con espaciado consistente.
+
+---
+
+## ♿ Accesibilidad y experiencia de usuario
+
+- Se mejoró el **contraste de colores** según el tipo de clima para asegurar una correcta legibilidad.
+- Se incorporó un **botón de navegación** en la vista de detalle para facilitar el retorno al inicio. (<- Volver a Ciudades)
+
+---
+
+## 🔧 Tecnologías utilizadas
+
+- HTML5
+- CSS3 / SASS (SCSS)
+- JavaScript (Vanilla)
+- Bootstrap 5
+- API OpenWeatherMap
+
+---
+
+## 📂 Repositorio
+
+🔗 **Repositorio GitHub:** *(https://github.com/DayneVidal88/weather-frontend-m3)*
+
+---
+
+## 👤 Autor
+
+**Dayne Vidal**  
+Portafolio Módulo 3-Bootcamp Desarrollo de Aplicaciones
+
+---
+
 
