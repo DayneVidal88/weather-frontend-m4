@@ -1,7 +1,17 @@
-// Lista de ciudades que quieres mostrar
-const ciudades = ["Santiago", "Valparaíso", "Quilpué", "Buenos Aires", "Madrid", "Londres", "París", "Roma", "Nueva York", "Tokio", "Sydney"];
+const ciudades = [
+  "Santiago",
+  "Valparaíso",
+  "Quilpué",
+  "Buenos Aires",
+  "Londres",
+  "París",
+  "Roma",
+  "Nueva York",
+  "Tokio",
+  "Sydney"
+];
 
-const apiKey = "437347debbfcbe7d1d65cfd7e0dc54ac"; // API Key de OpenWeatherMap
+const apiKey = "437347debbfcbe7d1d65cfd7e0dc54ac";
 const container = document.getElementById("ciudades-container");
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -11,35 +21,37 @@ document.addEventListener("DOMContentLoaded", () => {
     fetch(url)
       .then(res => res.json())
       .then(data => {
-        // Obtener descripción del clima
-          const descripcion = data.weather[0].description.toLowerCase();
+        const descripcion = data.weather[0].description.toLowerCase();
 
-          // Determinar clase de color según clima
-          const cardColor = descripcion.includes("claro") ? "card-clear"
-                        : descripcion.includes("nube") ? "card-cloudy"
-                        : descripcion.includes("lluvia") ? "card-rainy"
-                        : descripcion.includes("tormenta") ? "card-storm"
-                        : "";
+        let climaClase = "place-card--clear";
 
-          // Crear card con clase de color aplicada al div.card
-          const card = document.createElement("article");
-          card.className = "col-md-4 col-sm-6 mb-3";
+        if (descripcion.includes("nube")) climaClase = "place-card--cloudy";
+        if (descripcion.includes("lluvia")) climaClase = "place-card--rainy";
+        if (descripcion.includes("tormenta")) climaClase = "place-card--storm";
 
-          card.innerHTML = `
-            <div class="card shadow text-center ${cardColor}">
-              <div class="card-body">
-                <h5 class="card-title">${data.name}</h5>
-                <p class="card-text">
-                  <img src="https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png" alt="icono clima">
-                </p>
-                <p class="card-text">${data.main.temp}°C – ${data.weather[0].description}</p>
-                <a href="detalle.html?city=${data.name}" class="btn btn-primary">Ver detalle</a>
-              </div>
+        const card = document.createElement("div");
+        card.className = "col-12 col-md-6 col-lg-4 mb-4";
+
+        card.innerHTML = `
+          <div class="card place-card ${climaClase}">
+            <div class="card-body text-center">
+              <h5 class="place-card__title">${data.name}</h5>
+              <img 
+                class="place-card__icon"
+                src="https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png"
+                alt="${data.weather[0].description}"
+              />
+              <p class="place-card__temp">
+                ${data.main.temp}°C – ${data.weather[0].description}
+              </p>
+              <a href="detalle.html?city=${data.name}" class="btn btn-primary">
+                Ver detalle
+              </a>
             </div>
-          `;
+          </div>
+        `;
 
-          container.appendChild(card);
-
+        container.appendChild(card);
       })
       .catch(err => {
         console.error("Error al obtener datos:", err);

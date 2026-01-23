@@ -1,0 +1,62 @@
+.place-card {
+  border-radius: 15px;
+  text-align: center;
+
+  @include hover-card;
+
+  /* ===== ELEMENTOS ===== */
+  &__icon {
+    width: 80px;
+    height: 80px;
+  }
+
+  &__temp {
+    font-size: 1.4rem;
+    font-weight: bold;
+  }
+
+  &__title,
+  &__temp {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+  }
+
+  /* ===== MODIFICADORES ===== */
+  &--clear {
+    background-color: $clima-clear;
+    color: white;
+
+    .place-card__title,
+    .place-card__temp {
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+    }
+  }
+
+  &--cloudy {
+    background-color: $clima-cloudy;
+    color: #1f2933;
+
+    .place-card__title,
+    .place-card__temp {
+      text-shadow: none;
+    }
+  }
+
+  &--rainy {
+    background-color: $clima-rainy;
+    color: white;
+  }
+
+  &--storm {
+    background-color: $clima-storm;
+    color: white;
+  }
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: $mobile) {
+  .place-card__icon {
+    width: 60px;
+    height: 60px;
+  }
+}
+

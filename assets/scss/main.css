@@ -1,0 +1,94 @@
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(to bottom, #22afe7, #f0f8ff);
+  color: #333;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.weather-app__title {
+  font-weight: 600;
+  color: #004080;
+}
+
+main {
+  flex: 1;
+}
+
+.btn-outline-primary {
+  border-radius: 20px;
+}
+
+.navbar {
+  background: url("../img/cielo.png") no-repeat center;
+  background-size: cover;
+}
+.navbar .nav-link {
+  color: #292929 !important;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+}
+.navbar .navbar-brand {
+  color: #62a5e4 !important;
+  font-weight: bold;
+}
+
+.place-card {
+  border-radius: 15px;
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  /* ===== ELEMENTOS ===== */
+  /* ===== MODIFICADORES ===== */
+}
+.place-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+.place-card__icon {
+  width: 80px;
+  height: 80px;
+}
+.place-card__temp {
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+.place-card__title, .place-card__temp {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+.place-card--clear {
+  background-color: #87ceeb;
+  color: white;
+}
+.place-card--clear .place-card__title,
+.place-card--clear .place-card__temp {
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+.place-card--cloudy {
+  background-color: #b0c4de;
+  color: #1f2933;
+}
+.place-card--cloudy .place-card__title,
+.place-card--cloudy .place-card__temp {
+  text-shadow: none;
+}
+.place-card--rainy {
+  background-color: #5f9ea0;
+  color: white;
+}
+.place-card--storm {
+  background-color: #3c3c3c;
+  color: white;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 420px) {
+  .place-card__icon {
+    width: 60px;
+    height: 60px;
+  }
+}
+footer {
+  margin-top: auto;
+  background: #f8f9fa;
+  border-top: 1px solid #ddd;
+}/*# sourceMappingURL=main.css.map */
