@@ -1,3 +1,10 @@
+const climaClassMap = {
+  "Soleado": "place-card--clear",
+  "Nublado": "place-card--cloudy",
+  "Lluvioso": "place-card--rainy",
+  "Tormenta": "place-card--storm"
+};
+
 // Obtener ID desde la URL
 const params = new URLSearchParams(window.location.search);
 const lugarId = parseInt(params.get("id"));
@@ -30,13 +37,15 @@ lugar.pronosticoSemanal.forEach(dia => {
   const card = document.createElement("div");
   card.className = "col-sm-6 col-md-4 mb-3";
 
-  card.innerHTML = `
-    <div class="place-card place-card--${dia.estado.toLowerCase()}">
-      <h5>${dia.dia}</h5>
-      <p>${dia.min}°C / ${dia.max}°C</p>
-      <p>${dia.estado}</p>
-    </div>
-  `;
+ const climaClass = climaClassMap[dia.estado] || "";
+
+card.innerHTML = `
+  <div class="place-card ${climaClass}">
+    <h5>${dia.dia}</h5>
+    <p>🌡️ ${dia.min}°C / ${dia.max}°C</p>
+    <p>${dia.estado}</p>
+  </div>
+`;
 
   pronosticoContainer.appendChild(card);
 });
@@ -87,9 +96,9 @@ estadisticasContainer.innerHTML = `
 // ===============================
 let resumen = "Semana con clima variado.";
 
-if (stats.conteoClima["Soleado"] >= 3) {
+if (stats.conteoClima["Soleado"] >= 4) {
   resumen = "Semana mayormente soleada ☀️";
-} else if (stats.conteoClima["Lluvioso"] >= 3) {
+} else if (stats.conteoClima["Lluvioso"] >= 4) {
   resumen = "Semana mayormente lluviosa 🌧️";
 }
 
