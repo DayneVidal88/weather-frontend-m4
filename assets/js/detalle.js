@@ -1,88 +1,100 @@
-const apiKey = "437347debbfcbe7d1d65cfd7e0dc54ac";
-
-// Obtener ciudad desde URL
+// Obtener ID desde la URL
 const params = new URLSearchParams(window.location.search);
-const ciudad = params.get("city") || "Quilpué";
+const lugarId = parseInt(params.get("id"));
 
-// Título
-document.getElementById("titulo").textContent = `${ciudad} – Detalle del Clima`;
+// Buscar lugar
+const lugar = lugares.find(item => item.id === lugarId);
 
-// URLs
-const urlActual = `https://api.openweathermap.org/data/2.5/weather?q=${ciudad}&appid=${apiKey}&units=metric&lang=es`;
-const urlForecast = `https://api.openweathermap.org/data/2.5/forecast?q=${ciudad}&appid=${apiKey}&units=metric&lang=es`;
+// Validación
+if (!lugar) {
+  document.body.innerHTML = "<p>Error: Lugar no encontrado</p>";
+  throw new Error("Lugar no encontrado");
+}
 
-// ====================
-// CLIMA ACTUAL
-// ====================
-fetch(urlActual)
-  .then(res => res.json())
-  .then(data => {
-    document.getElementById("temp").textContent = `${data.main.temp}°C`;
-    document.getElementById("estado").textContent = data.weather[0].description;
-    document.getElementById("humedad").textContent = `Humedad: ${data.main.humidity}%`;
-    document.getElementById("viento").textContent = `Viento: ${data.wind.speed} km/h`;
+// ===============================
+// ELEMENTOS DEL DOM
+// ===============================
+const titulo = document.getElementById("titulo");
+const pronosticoContainer = document.getElementById("pronostico");
+const estadisticasContainer = document.getElementById("estadisticas");
 
-    const descripcion = data.weather[0].description.toLowerCase();
-    const detalleCard = document.getElementById("detalle-card");
+// ===============================
+// TITULO
+// ===============================
+titulo.textContent = `Clima en ${lugar.nombre}`;
 
-    detalleCard.classList.add("place-card");
+// ===============================
+// PRONÓSTICO SEMANAL
+// ===============================
+lugar.pronosticoSemanal.forEach(dia => {
+  const card = document.createElement("div");
+  card.className = "col-sm-6 col-md-4 mb-3";
 
-    if (descripcion.includes("claro")) {
-      detalleCard.classList.add("place-card--clear");
-    } else if (descripcion.includes("nube")) {
-      detalleCard.classList.add("place-card--cloudy");
-    } else if (descripcion.includes("lluvia")) {
-      detalleCard.classList.add("place-card--rainy");
-    } else if (descripcion.includes("tormenta")) {
-      detalleCard.classList.add("place-card--storm");
-    }
-  })
-  .catch(err => console.error("Error clima actual:", err));
+  card.innerHTML = `
+    <div class="place-card place-card--${dia.estado.toLowerCase()}">
+      <h5>${dia.dia}</h5>
+      <p>${dia.min}°C / ${dia.max}°C</p>
+      <p>${dia.estado}</p>
+    </div>
+  `;
 
-// ====================
-// PRONÓSTICO
-// ====================
-fetch(urlForecast)
-  .then(res => res.json())
-  .then(data => {
-    const pronosticoContainer = document.getElementById("pronostico");
+  pronosticoContainer.appendChild(card);
+});
 
-    const dias = {};
-    data.list.forEach(item => {
-      const fecha = new Date(item.dt_txt);
-      const dia = fecha.toLocaleDateString("es-ES", { weekday: "long" });
-      if (!dias[dia]) dias[dia] = item;
-    });
+// ===============================
+// ESTADÍSTICAS
+// ===============================
+function calcularEstadisticas(pronostico) {
+  let min = Infinity;
+  let max = -Infinity;
+  let suma = 0;
 
-    Object.keys(dias).forEach(dia => {
-      const info = dias[dia];
-      const descripcion = info.weather[0].description.toLowerCase();
+  const conteoClima = {};
 
-      let climaClase = "place-card--clear";
-      if (descripcion.includes("nube")) climaClase = "place-card--cloudy";
-      if (descripcion.includes("lluvia")) climaClase = "place-card--rainy";
-      if (descripcion.includes("tormenta")) climaClase = "place-card--storm";
+  pronostico.forEach(dia => {
+    if (dia.min < min) min = dia.min;
+    if (dia.max > max) max = dia.max;
 
-      const card = document.createElement("div");
-      card.className = "col-12 col-md-4 mb-3";
+    suma += dia.max;
 
-      card.innerHTML = `
-        <div class="card place-card ${climaClase}">
-          <div class="card-body text-center">
-            <h5 class="place-card__title">${dia}</h5>
-            <img
-              class="place-card__icon"
-              src="https://openweathermap.org/img/wn/${info.weather[0].icon}@2x.png"
-              alt="${info.weather[0].description}"
-            />
-            <p class="place-card__temp">
-              ${info.main.temp}°C – ${info.weather[0].description}
-            </p>
-          </div>
-        </div>
-      `;
+    conteoClima[dia.estado] = (conteoClima[dia.estado] || 0) + 1;
+  });
 
-      pronosticoContainer.appendChild(card);
-    });
-  })
-  .catch(err => console.error("Error pronóstico:", err));
+  return {
+    min,
+    max,
+    promedio: Math.round(suma / pronostico.length),
+    conteoClima
+  };
+}
+
+const stats = calcularEstadisticas(lugar.pronosticoSemanal);
+
+// ===============================
+// MOSTRAR ESTADÍSTICAS
+// ===============================
+estadisticasContainer.innerHTML = `
+  <h4>📊 Estadísticas semanales</h4>
+  <ul>
+    <li>🌡️ Temperatura mínima: ${stats.min}°C</li>
+    <li>🔥 Temperatura máxima: ${stats.max}°C</li>
+    <li>📈 Temperatura promedio: ${stats.promedio}°C</li>
+  </ul>
+`;
+
+// ===============================
+// RESUMEN AUTOMÁTICO
+// ===============================
+let resumen = "Semana con clima variado.";
+
+if (stats.conteoClima["Soleado"] >= 3) {
+  resumen = "Semana mayormente soleada ☀️";
+} else if (stats.conteoClima["Lluvioso"] >= 3) {
+  resumen = "Semana mayormente lluviosa 🌧️";
+}
+
+const resumenEl = document.createElement("p");
+resumenEl.className = "mt-3 fw-bold";
+resumenEl.textContent = resumen;
+
+estadisticasContainer.appendChild(resumenEl);
