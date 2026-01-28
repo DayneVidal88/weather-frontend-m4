@@ -1,114 +1,131 @@
-# 🌦️ App de Clima – Módulo 3
+# 🌦️ Weather Frontend – Módulo 4
 
 ## 📌 Descripción del proyecto
+Aplicación web de clima desarrollada con **HTML, SASS y JavaScript puro**, que permite visualizar el estado del clima y un pronóstico semanal por ciudad.
 
-Esta aplicación web muestra información climática de distintas ciudades del mundo, permitiendo visualizar el **clima actual** en una vista principal (Home) y acceder a una **vista de detalle** con información ampliada y un pronóstico simplificado.
+En este módulo, la aplicación **NO consume APIs externas**. Toda la información climática se encuentra **modelada localmente en JavaScript**, cumpliendo con los requisitos del Módulo 4.
 
-El proyecto corresponde a la iteración del **Módulo 3**, cuyo foco está en la **interfaz, estilos y experiencia de usuario**, manteniendo la funcionalidad base desarrollada previamente.
-
----
-
-## 🎯 Temática
-
-App de clima orientada a mostrar el estado meteorológico de **ciudades nacionales e internacionales**, utilizando una interfaz clara, responsiva y visualmente coherente con la temática climática.
-
----
-
-## 🧩 Estructura de la aplicación
-
-- **Home (`index.html`)**  
-  Grilla de cards con el clima actual de distintas ciudades.
-
-- **Detalle (`detalle.html`)**  
-  Vista con información ampliada del clima de la ciudad seleccionada y pronóstico semanal simplificado, incluyendo un botón de navegación para volver al inicio.
+El objetivo principal del proyecto es aplicar correctamente:
+- Modelado de datos en arreglos y objetos
+- Manipulación del DOM
+- Uso de funciones, ciclos y condicionales
+- Cálculo de estadísticas a partir de datos
 
 ---
 
-## 🎨 Metodología de estilos
-
-Se utilizó la metodología **BEM (Block, Element, Modifier)** para la organización de clases CSS, permitiendo:
-
-- Nombres de clases claros y semánticos
-- Reutilización de componentes
-- Mayor mantenibilidad del código
-
-**Ejemplos:**
-- `.place-card`
-- `.place-card__title`
-- `.place-card--clear`
-
-Bootstrap se utiliza en conjunto con BEM para el layout y componentes base.
+## 🎯 Objetivos del Módulo 4
+- Renderizar información dinámica desde datos locales
+- Separar datos, lógica y presentación
+- Calcular estadísticas semanales de clima
+- Generar un resumen automático según los datos
+- Mantener una estructura de código clara y ordenada
 
 ---
 
-## 🛠️ SASS y estructura de estilos
-
-Los estilos fueron refactorizados utilizando **SASS (SCSS)**, con una estructura modular:
+## 🗂️ Estructura del proyecto
 
 ```
-assets/
-├── scss/
-│   ├── base/
-        └── _mixins.scss         // Reutiliza efecto hover en las cards
-│   │   └── _variables.scss      // Variables de colores, fuentes y breakpoints
-│   ├── layout/
-│   │   └── _layout.scss         // Estilos globales y estructura base
-│   ├── components/
-│   │   ├── _navbar.scss         // Navbar
-│   │   ├── _place-card.scss     // Cards de clima (BEM)
-│   │   └── _footer.scss         // Footer
-│   └── main.scss                // Importa todos los parciales
+weather-frontend-m4/
 │
-├── css/
-│   └── main.css                 // CSS compilado
+├── index.html          # Vista principal (ciudades)
+├── detalle.html        # Vista detalle por ciudad
+│
+├── assets/
+│   ├── css/            # CSS compilado desde SASS
+│   ├── scss/           # Archivos SASS
+│   └── js/
+│       ├── data.js     # Modelo de datos climáticos
+│       ├── main.js     # Lógica de la vista principal
+│       └── detalle.js  # Lógica de la vista detalle y estadísticas
+│
+└── README.md
 ```
 
-### Características utilizadas:
-- Variables (`$colors`, `$fonts`, `$breakpoints`)
-- Anidamiento
-- Mixins reutilizables
-- Media queries
+---
+
+## 🧠 Modelo de datos
+Los datos del clima se encuentran definidos en el archivo `data.js` mediante un arreglo de objetos llamado `lugares`.
+
+Cada lugar contiene:
+- `id`
+- `nombre`
+- `tempActual`
+- `estadoActual`
+- `pronosticoSemanal` (arreglo con días, temperaturas y estado del clima)
+
+Ejemplo simplificado:
+
+```js
+{
+  id: 1,
+  nombre: "Santiago",
+  tempActual: 24,
+  estadoActual: "Soleado",
+  pronosticoSemanal: [
+    { dia: "Lunes", min: 15, max: 25, estado: "Soleado" }
+  ]
+}
+```
 
 ---
 
-## 📱 Responsividad y layout
+## 🖥️ Funcionamiento de la aplicación
 
-- Se utilizó el **sistema de grillas de Bootstrap** (`col-12`, `col-md-6`, `col-lg-4`).
-- En pantallas pequeñas, las cards se muestran en una sola columna.
-- En pantallas grandes, se organizan en múltiples columnas con espaciado consistente.
+### Vista principal (Home)
+- Muestra una tarjeta por cada ciudad
+- Renderiza nombre, temperatura actual y estado del clima
+- Permite navegar al detalle mediante un botón
+
+### Vista detalle
+- Muestra el pronóstico semanal completo
+- Calcula automáticamente:
+  - Temperatura mínima
+  - Temperatura máxima
+  - Temperatura promedio
+- Genera un resumen textual según el clima predominante
+- Incluye botón para volver a la vista principal
 
 ---
 
-## ♿ Accesibilidad y experiencia de usuario
+## 📊 Estadísticas
+Las estadísticas se calculan dinámicamente usando funciones y ciclos en JavaScript, sin datos predefinidos en el HTML.
 
-- Se mejoró el **contraste de colores** según el tipo de clima para asegurar una correcta legibilidad.
-- Se incorporó un **botón de navegación** en la vista de detalle para facilitar el retorno al inicio. (<- Volver a Ciudades)
+Ejemplo de estadísticas mostradas:
+- 🌡️ Temperatura mínima semanal
+- 🔥 Temperatura máxima semanal
+- 📈 Temperatura promedio
+- 📝 Resumen automático del clima
 
 ---
 
-## 🔧 Tecnologías utilizadas
-
+## 🛠️ Tecnologías utilizadas
 - HTML5
-- CSS3 / SASS (SCSS)
-- JavaScript (Vanilla)
-- Bootstrap 5
-- API OpenWeatherMap
+- SASS (SCSS)
+- JavaScript (ES6)
+- Bootstrap (estructura y layout)
 
 ---
+
+## 🚫 Restricciones del módulo
+- ❌ No se utilizan APIs externas
+- ❌ No se consumen datos dinámicos desde internet
+- ✅ Todos los datos son locales y manipulados con JavaScript
+
+---
+
+## 👨‍💻 Autor
+**Dayne Vidal**  
+Portafolio Módulo 4-Bootcamp Desarrollo de Aplicaciones
+
+---
+
+## 📎 Notas finales
+Este proyecto reutiliza la base visual del Módulo 3, adaptando completamente la lógica JavaScript para cumplir con los requerimientos del Módulo 4.
+
+El foco principal está en la correcta manipulación de datos, cálculo de estadísticas y renderizado dinámico del DOM.
 
 ## 📂 Repositorio
 
-🔗 **Repositorio GitHub:** *(https://github.com/DayneVidal88/weather-frontend-m3)*
+🔗 **Repositorio GitHub:** *(https://github.com/DayneVidal88/weather-frontend-m4)*
 
-🔗 https://daynevidal88.github.io/weather-frontend-m3/index.html
-
----
-
-## 👤 Autor
-
-**Dayne Vidal**  
-Portafolio Módulo 3-Bootcamp Desarrollo de Aplicaciones
-
----
-
-
+🔗 https://daynevidal88.github.io/weather-frontend-m4/index.html
